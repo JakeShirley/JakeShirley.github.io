@@ -1,0 +1,50 @@
+@use "@picocss/pico/scss" with (
+  $theme-color: "jade",
+  $modules: (
+    "forms/basics": false,
+    "forms/checkbox-radio-switch": false,
+    "forms/input-color": false,
+    "forms/input-date": false,
+    "forms/input-file": false,
+    "forms/input-range": false,
+    "forms/input-search": false,
+    "components/accordion": false,
+    "components/dropdown": false,
+    "components/group": false,
+    "components/loading": false,
+    "components/modal": false,
+    "components/progress": false,
+    "components/tooltip": false,
+  )
+);
+
+html {
+  overflow-wrap: anywhere;
+}
+
+body > header nav {
+  flex-wrap: wrap;
+}
+
+figure {
+  margin-block: 2rem;
+}
+
+figure img,
+figure video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+figure img,
+figure video {
+  width: auto;
+  max-width: min(100%, 640px);
+  max-height: 560px;
+  margin-inline: auto;
+}
+
+figcaption p:last-child {
+  margin-bottom: 0;
+}

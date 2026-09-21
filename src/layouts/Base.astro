@@ -1,0 +1,90 @@
+---
+import "../styles/main.scss";
+import { siteConfig } from "../settings";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: "website" | "article";
+  image?: string;
+}
+
+const { title, description = siteConfig.description, ogType = "website", image } = Astro.props;
+const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={siteConfig.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteConfig.title} />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+  </head>
+  <body class="container">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="/"><strong>{siteConfig.title}</strong></a></li>
+        </ul>
+        <ul>
+          <li><a href="/#about">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main-content" tabindex="-1">
+      <article>
+        <slot />
+      </article>
+    </main>
+    <footer>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href={siteConfig.github}>GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
+</html>
+
+<style>
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  footer nav {
+    flex-wrap: wrap;
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateY(-100%);
+    padding: 0.5rem 1rem;
+    background: var(--pico-background-color);
+    z-index: 100;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>
