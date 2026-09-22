@@ -8,6 +8,8 @@ description: Jake Shirley's professional experience, education, technical knowle
 
 I am a curious, hands-on engineer who works best with direct customer contact and tight feedback cycles. At Mojang Studios, I work closely with creators to understand their goals and extend the platform to support them. I combine broad technical knowledge with practical judgment to turn customer needs into clear plans and team priorities. I deliver through both my own engineering work and the teams I lead and support.
 
+I am located in the beatutiful Pacific Northwest (Seattle area).
+
 # Professional Experience
 
 #### Mojang Studios (2015 - Present) - Principal Software Engineer
