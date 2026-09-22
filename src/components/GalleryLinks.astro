@@ -1,0 +1,18 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { galleryPostPath } from "../gallery-posts";
+
+interface Props {
+  category: CollectionEntry<"galleryPosts">["data"]["category"];
+}
+
+const { category } = Astro.props;
+const posts = (await getCollection("galleryPosts", (post) => post.data.category === category))
+  .sort((first, second) => category === "laser-works"
+    ? first.data.order - second.data.order || first.data.title.localeCompare(second.data.title)
+    : (second.data.pubDate?.valueOf() ?? 0) - (first.data.pubDate?.valueOf() ?? 0));
+---
+
+<ul>
+  {posts.map((post) => <li><a href={galleryPostPath(post)}>{post.data.title}</a></li>)}
+</ul>

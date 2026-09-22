@@ -19,7 +19,8 @@ site in `dist/`. `npm run preview` serves that build locally.
 
 ## Content
 
-- Home page: `src/pages/index.astro`
+- Home page: `src/pages/index.mdx`, with Markdown headings and text plus
+  `GalleryLinks` components for automatically generated category lists.
 - Site metadata and links: `src/settings.ts`
 - Shared layout: `src/layouts/Base.astro`
 - Theme styles and gallery sizing: `src/styles/main.scss`
