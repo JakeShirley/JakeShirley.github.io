@@ -23,23 +23,28 @@ site in `dist/`. `npm run preview` serves that build locally.
 - Site metadata and links: `src/settings.ts`
 - Shared layout: `src/layouts/Base.astro`
 - Theme styles and gallery sizing: `src/styles/main.scss`
-- Posts: `src/content/blog/*.md`, with `title` and `description` frontmatter.
-  `pubDate` and `image` are optional. Undated migrated content stays undated.
-- Laser galleries: `src/content/laser-works/*.md`, validated by the `laserWorks`
-  collection in `src/content.config.ts`. Write text and links in Markdown below
+- Gallery posts: `src/content/gallery-posts/*.md`, validated by the `galleryPosts`
+  collection in `src/content.config.ts`. Set `title`, `description`, `mediaPath`,
+  and `category` (`laser-works` or `electronics`). `pubDate` and `image` are
+  optional. Write text and links in Markdown below
   the frontmatter. Edit the ordered `media` list in YAML to update the gallery.
-  Each entry has `type: photo` or `type: video`, plus `name`, `width`, and `height`.
+  Each entry has `type: photo` or `type: video`, plus `src`, `width`, and `height`.
+  `src` is a filename including its extension, relative to `mediaPath`.
+  Photos can specify a `preview` filename; videos can specify a `poster` filename.
   Photos require `alt`; videos require `label` and `linkText`. Move whole entries
   within `media` to interleave photos and videos in any order.
-  Either type can include `caption: "Your caption here"` for centered plain text
+  Either type can include `caption: "Your caption here"` for centered Markdown
   beneath the media. Omit it or leave it blank to show no caption.
-  `src/pages/laser-works/[...id].astro` renders each entry using the shared
-  `src/layouts/LaserGallery.astro` template, like the blog route. No `layout`
-  frontmatter is needed. Filenames determine the URLs; galleries appear on the
-  homepage automatically, sorted by optional `order` (default 0), then title.
+  Captions are trusted, repository-authored content and may include HTML.
+  `src/pages/[...id].astro` renders all entries with `src/layouts/GalleryPost.astro`.
+  No `layout` frontmatter is needed. `src/gallery-posts.ts` keeps the existing
+  `/laser-works/<filename>/` and `/blog/<filename>/` URLs.
+  The homepage groups posts under Laser Works and Electronics by category.
+  Laser Works uses optional `order` (default 0), then title; Electronics uses
+  newest `pubDate` first. Undated posts remain supported.
 - Images and videos: `public/media/`, served unchanged at `/media/`.
 
-Posts appear automatically on the homepage and in `/rss.xml`. The WLED article
+Gallery posts appear automatically on the homepage and in `/rss.xml`. The WLED article
 is at `/blog/wled-house-numbers/`; `/wled-house-numbers.html` redirects there.
 The built homepage also remains available at `/index.html`.
 

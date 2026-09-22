@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { marked } from "marked";
+import Base from "./Base.astro";
+
+type Props = CollectionEntry<"galleryPosts">["data"];
+
+const { title, description, image, category, pubDate, mediaPath, media } = Astro.props;
+const firstPhotoIndex = media.findIndex((item) => item.type === "photo");
+const categoryLabel = category === "laser-works" ? "Laser Works" : "Electronics";
+const captions = await Promise.all(media.map((item) => item.caption ? marked.parse(item.caption) : ""));
+---
+
+<Base title={title} description={description} image={image} ogType="article">
+  <p><a href={`/#${category}`}>{categoryLabel}</a></p>
+  <h1>{title}</h1>
+  {pubDate && (
+    <p><time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" })}</time></p>
+  )}
+  <slot />
+  {media.map((item, index) => (
+    <figure>
+      {item.type === "video" ? (
+        <video
+          controls
+          preload="metadata"
+          playsinline
+          width={item.width}
+          height={item.height}
+          poster={item.poster ? `${mediaPath}/${item.poster}` : undefined}
+          aria-label={item.label}
+        >
+          <source src={`${mediaPath}/${item.src}`} type="video/mp4" />
+          <a href={`${mediaPath}/${item.src}`}>{item.linkText}</a>
+        </video>
+      ) : (
+        <a href={`${mediaPath}/${item.src}`}>
+          <img
+            src={`${mediaPath}/${item.preview ?? item.src}`}
+            alt={item.alt}
+            width={item.width}
+            height={item.height}
+            loading={index === firstPhotoIndex ? "eager" : "lazy"}
+            decoding="async"
+          />
+        </a>
+      )}
+      {captions[index] && <figcaption set:html={captions[index]} />}
+    </figure>
+  ))}
+</Base>
+
+<style>
+  figcaption {
+    text-align: center;
+  }
+</style>

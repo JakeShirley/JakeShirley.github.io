@@ -1,11 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
+import { galleryPostPath } from "../gallery-posts";
 
-const posts = (await getCollection("blog")).sort((first, second) =>
+const galleryPosts = await getCollection("galleryPosts");
+const posts = galleryPosts.filter((post) => post.data.category === "electronics").sort((first, second) =>
   (second.data.pubDate?.valueOf() ?? 0) - (first.data.pubDate?.valueOf() ?? 0)
 );
-const galleries = (await getCollection("laserWorks")).sort((first, second) =>
+const galleries = galleryPosts.filter((post) => post.data.category === "laser-works").sort((first, second) =>
   first.data.order - second.data.order || first.data.title.localeCompare(second.data.title)
 );
 ---
@@ -18,13 +20,13 @@ const galleries = (await getCollection("laserWorks")).sort((first, second) =>
   <section aria-labelledby="laser-works">
     <h2 id="laser-works">Laser Works</h2>
     <ul>
-      {galleries.map((gallery) => <li><a href={`/laser-works/${gallery.id}/`}>{gallery.data.title}</a></li>)}
+      {galleries.map((gallery) => <li><a href={galleryPostPath(gallery)}>{gallery.data.title}</a></li>)}
     </ul>
   </section>
   <section aria-labelledby="electronics">
     <h2 id="electronics">Electronics</h2>
     <ul>
-      {posts.map((post) => <li><a href={`/blog/${post.id}/`}>{post.data.title}</a></li>)}
+      {posts.map((post) => <li><a href={galleryPostPath(post)}>{post.data.title}</a></li>)}
     </ul>
   </section>
 </Base>

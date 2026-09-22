@@ -1,0 +1,22 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import GalleryPost from "../layouts/GalleryPost.astro";
+import { galleryPostPath } from "../gallery-posts";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("galleryPosts");
+  return posts.map((post) => ({
+    params: { id: galleryPostPath(post).slice(1, -1) },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"galleryPosts">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<GalleryPost {...post.data}><Content /></GalleryPost>
