@@ -36,7 +36,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <header>
       <nav aria-label="Main">
         <ul>
-          <li><a href="/"><strong>{siteConfig.title}</strong></a></li>
+          <li>
+            <a href="/" class="site-identity">
+              <img src="https://avatars.githubusercontent.com/u/1000311?v=4&amp;s=80" alt="" width="40" height="40" />
+              <strong>{siteConfig.title}</strong>
+            </a>
+          </li>
         </ul>
         <ul>
           <li><a href="/">Home</a></li>
@@ -69,6 +74,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
   main {
     flex: 1;
+  }
+
+  .site-identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .site-identity img {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 2px solid var(--pico-primary);
+    border-radius: 50%;
+    object-fit: cover;
   }
 
   footer nav {
