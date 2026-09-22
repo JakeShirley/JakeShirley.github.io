@@ -5,21 +5,24 @@ import Base from "../layouts/Base.astro";
 const posts = (await getCollection("blog")).sort((first, second) =>
   (second.data.pubDate?.valueOf() ?? 0) - (first.data.pubDate?.valueOf() ?? 0)
 );
+const galleries = (await getCollection("laserWorks")).sort((first, second) =>
+  first.data.order - second.data.order || first.data.title.localeCompare(second.data.title)
+);
 ---
 
 <Base>
   <section aria-labelledby="about">
-    <h2 id="about">About</h2>
+    <h2 id="about">About Me</h2>
     <p>I am a hands-on engineer who works best with direct customer contact and tight feedback cycles. At Mojang Studios, I work closely with creators to understand their goals and extend the platform to support them. I combine broad technical knowledge with practical judgment to turn customer needs into clear plans and team priorities. I deliver through both my own engineering work and the teams I lead and support.</p>
   </section>
   <section aria-labelledby="laser-works">
     <h2 id="laser-works">Laser Works</h2>
     <ul>
-      <li><a href="/laser-works/tumblers/">Tumblers</a></li>
+      {galleries.map((gallery) => <li><a href={`/laser-works/${gallery.id}/`}>{gallery.data.title}</a></li>)}
     </ul>
   </section>
-  <section aria-labelledby="writing">
-    <h2 id="writing">Writing</h2>
+  <section aria-labelledby="electronics">
+    <h2 id="electronics">Electronics</h2>
     <ul>
       {posts.map((post) => <li><a href={`/blog/${post.id}/`}>{post.data.title}</a></li>)}
     </ul>

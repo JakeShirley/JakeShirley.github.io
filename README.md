@@ -25,6 +25,18 @@ site in `dist/`. `npm run preview` serves that build locally.
 - Theme styles and gallery sizing: `src/styles/main.scss`
 - Posts: `src/content/blog/*.md`, with `title` and `description` frontmatter.
   `pubDate` and `image` are optional. Undated migrated content stays undated.
+- Laser galleries: `src/content/laser-works/*.md`, validated by the `laserWorks`
+  collection in `src/content.config.ts`. Write text and links in Markdown below
+  the frontmatter. Edit the ordered `media` list in YAML to update the gallery.
+  Each entry has `type: photo` or `type: video`, plus `name`, `width`, and `height`.
+  Photos require `alt`; videos require `label` and `linkText`. Move whole entries
+  within `media` to interleave photos and videos in any order.
+  Either type can include `caption: "Your caption here"` for centered plain text
+  beneath the media. Omit it or leave it blank to show no caption.
+  `src/pages/laser-works/[...id].astro` renders each entry using the shared
+  `src/layouts/LaserGallery.astro` template, like the blog route. No `layout`
+  frontmatter is needed. Filenames determine the URLs; galleries appear on the
+  homepage automatically, sorted by optional `order` (default 0), then title.
 - Images and videos: `public/media/`, served unchanged at `/media/`.
 
 Posts appear automatically on the homepage and in `/rss.xml`. The WLED article

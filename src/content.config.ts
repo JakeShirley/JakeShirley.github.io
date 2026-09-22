@@ -12,4 +12,34 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const laserWorks = defineCollection({
+  loader: glob({ base: "./src/content/laser-works", pattern: "**/*.md" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    image: z.string().optional(),
+    order: z.number().default(0),
+    mediaPath: z.string(),
+    media: z.array(z.discriminatedUnion("type", [
+      z.object({
+        type: z.literal("photo"),
+        name: z.string(),
+        alt: z.string(),
+        caption: z.string().trim().optional(),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+      }),
+      z.object({
+        type: z.literal("video"),
+        name: z.string(),
+        label: z.string(),
+        linkText: z.string(),
+        caption: z.string().trim().optional(),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+      }),
+    ])),
+  }),
+});
+
+export const collections = { blog, laserWorks };
