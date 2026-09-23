@@ -7,7 +7,11 @@ type Props = CollectionEntry<"galleryPosts">["data"];
 
 const { title, description, image, category, pubDate, mediaPath, media } = Astro.props;
 const firstPhotoIndex = media.findIndex((item) => item.type === "photo");
-const categoryLabel = category === "laser-works" ? "Laser Works" : "Electronics";
+const categoryLabel = {
+  "laser-works": "Laser Works",
+  electronics: "Electronics",
+  "school-projects": "School Projects",
+}[category];
 const captions = await Promise.all(media.map((item) => item.caption ? marked.parse(item.caption) : ""));
 ---
 
@@ -19,34 +23,37 @@ const captions = await Promise.all(media.map((item) => item.caption ? marked.par
   )}
   <slot />
   {media.map((item, index) => (
-    <figure>
-      {item.type === "video" ? (
-        <video
-          controls
-          preload="metadata"
-          playsinline
-          width={item.width}
-          height={item.height}
-          poster={item.poster ? `${mediaPath}/${item.poster}` : undefined}
-          aria-label={item.label}
-        >
-          <source src={`${mediaPath}/${item.src}`} type="video/mp4" />
-          <a href={`${mediaPath}/${item.src}`}>{item.linkText}</a>
-        </video>
-      ) : (
-        <a href={`${mediaPath}/${item.src}`}>
-          <img
-            src={`${mediaPath}/${item.preview ?? item.src}`}
-            alt={item.alt}
+    <Fragment>
+      {item.heading && <h2>{item.heading}</h2>}
+      <figure>
+        {item.type === "video" ? (
+          <video
+            controls
+            preload="metadata"
+            playsinline
             width={item.width}
             height={item.height}
-            loading={index === firstPhotoIndex ? "eager" : "lazy"}
-            decoding="async"
-          />
-        </a>
-      )}
-      {captions[index] && <figcaption set:html={captions[index]} />}
-    </figure>
+            poster={item.poster ? `${mediaPath}/${item.poster}` : undefined}
+            aria-label={item.label}
+          >
+            <source src={`${mediaPath}/${item.src}`} type="video/mp4" />
+            <a href={`${mediaPath}/${item.src}`}>{item.linkText}</a>
+          </video>
+        ) : (
+          <a href={`${mediaPath}/${item.src}`}>
+            <img
+              src={`${mediaPath}/${item.preview ?? item.src}`}
+              alt={item.alt}
+              width={item.width}
+              height={item.height}
+              loading={index === firstPhotoIndex ? "eager" : "lazy"}
+              decoding="async"
+            />
+          </a>
+        )}
+        {captions[index] && <figcaption set:html={captions[index]} />}
+      </figure>
+    </Fragment>
   ))}
 </Base>
 
